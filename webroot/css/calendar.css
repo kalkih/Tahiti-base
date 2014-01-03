@@ -1,0 +1,15 @@
+.calendar {}
+
+.calendar .title { font-size: 24px; border-bottom: 1px solid #D8D8D8;}
+.calendar th { font-size: 18px; font-weight: bold;}
+.calendar td { max-width: 70px; min-width: 70px; height: 60px;}
+
+.calendar .red-day{ color: #FF4444;}
+.calendar .current-day { font-weight: bold;}
+.calendar .nameday { font-size: 10px; line-height: 1em; padding: 0; margin: 5px 0 0 0; overflow: hidden; vertical-align: bottom; text-align: left;}
+.calendar .day {border-bottom: 3px solid #D8D8D8;}
+
+.calendar .in-focus,
+.calendar .out-focus { padding: 5px; font-size: 20px; vertical-align: top; text-align: left;}
+.calendar .in-focus { border: 1px solid #D8D8D8;}
+.calendar .out-focus { background-color: #E5E5E5;}

@@ -9,9 +9,7 @@ include(__DIR__.'/config.php');
  
 // Do it and store it all in variables in the Tahiti container.
 $tahiti['title'] = "404";
-$tahiti['header'] = "";
-$tahiti['main'] = "This is a Tahiti 404. Document is not here.";
-$tahiti['footer'] = "";
+$tahiti['main'] = "This is a Tahiti 404. Page was not found!.";
  
 // Send the 404 header 
 header("HTTP/1.0 404 Not Found");

@@ -19,13 +19,13 @@ set_exception_handler('myExceptionHandler');
  *
  */
 function myAutoloader($class) {
-  $path = TAHITI_INSTALL_PATH . "/src/{$class}/{$class}.php";
-  if(is_file($path)) {
-    include($path);
-  }
-  else {
-    throw new Exception("Classfile '{$class}' does not exists.");
-  }
+    $path = TAHITI_INSTALL_PATH . "/src/{$class}/{$class}.php";
+    if(is_file($path)) {
+        include($path);
+    }
+    else {
+        throw new Exception("Classfile '{$class}' does not exists.");
+    }
 }
 spl_autoload_register('myAutoloader');
 
