@@ -23,7 +23,8 @@ class CTextFilter {
             'bbcode'   => 'bbcode2html',
             'link'     => 'make_clickable',
             'markdown' => 'markdown',
-            'nl2br'    => 'nl2br',  
+            'nl2br'    => 'nl2br',
+            ''         => '',
         );
 
         // Make an array of the comma separated string $filter
@@ -31,7 +32,10 @@ class CTextFilter {
 
         foreach($filter as $val) {
             //echo $val.$all[$val]."<br />";
-            $text = $this->$valid[$val]($text);
+            if ($valid[$val] != '') {
+                $text = $this->$valid[$val]($text);
+            }
+            
         }
 
         return $text;

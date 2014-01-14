@@ -9,7 +9,7 @@ class CBlog extends CContent {
         $this->database = $database;
     }
 
-    public function showBlog($slug) {
+    public function showBlog($slug, $limit = null) {
 
         $db = new CDatabase($this->database);
         $cf = new CTextFilter();
@@ -21,14 +21,16 @@ class CBlog extends CContent {
         }
         $sql = "
         SELECT *
-        FROM Content
+        FROM Blog
         WHERE
         type = 'post' AND
         $slugSql AND
         published <= NOW()
-        ORDER BY updated DESC
-        ;
-        ";
+        ORDER BY published DESC";
+        if ($limit) {
+            $sql .= " LIMIT {$limit} OFFSET 0;";
+        }
+        else $sql .= ';';
 
         $res = $db->ExecuteSelectQueryAndFetchAll($sql);
         $array = array();
@@ -38,12 +40,16 @@ class CBlog extends CContent {
                 $title  = htmlentities($c->title, null, 'UTF-8');
                 $data   = $cf->doFilter(htmlentities($c->DATA, null, 'UTF-8'), $c->FILTER);
                 $id  = intval($c->id);
+                $published  = htmlentities($c->published, null, 'UTF-8');
                 $created  = htmlentities($c->created, null, 'UTF-8');
+                $category = htmlentities($c->category, null, 'UTF-8');
                 
                 $array[$c->slug]['title'] = $title;
                 $array[$c->slug]['data'] = $data;
                 $array[$c->slug]['id'] = $id;
+                $array[$c->slug]['published'] = $published;
                 $array[$c->slug]['created'] = $created;
+                $array[$c->slug]['category'] = $category;
             }
             return $array;
         } else if($slug) {
@@ -53,6 +59,15 @@ class CBlog extends CContent {
         }
         
         return $content;
+    }
+
+    public function description($text, $url, $limit = 20) {
+      if (str_word_count($text, 0) > $limit) {
+          $words = str_word_count($text, 2);
+          $pos = array_keys($words);
+          $text = substr($text, 0, $pos[$limit]) . '... <br> <a href="' . $url . '"> Läs mer »</a>';
+      }
+      return $text;
     }
     
 }

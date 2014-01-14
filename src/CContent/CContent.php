@@ -49,22 +49,22 @@ class CContent {
         }
     }
 
-    public function editPost($title, $slug, $url, $data, $type, $filter, $published, $id) {
+    public function editPost($title, $category, $slug, $url, $data, $filter, $published, $id) {
         $db = new CDatabase($this->database);
         $sql = '
-            UPDATE Content SET
+            UPDATE Blog SET
                 title   = ?,
+                category= ?,
                 slug    = ?,
                 url     = ?,
                 data    = ?,
-                type    = ?,
                 filter  = ?,
                 published = ?,
                 updated = NOW()
             WHERE 
                 id = ?
         ';
-        $params = array($title, $slug, $url, $data, $type, $filter, $published, $id);
+        $params = array($title, $category, $slug, $url, $data, $filter, $published, $id);
         $res = $db->ExecuteQuery($sql, $params);
         if($res) {
             $output = 'Uppdateringen lyckades!';
@@ -75,38 +75,39 @@ class CContent {
         return $output;
     }
 
-    public function newPost($title, $slug, $url, $data, $type, $filter, $published) {
+    public function newPost($title, $category, $slug, $url, $data, $type, $filter, $published) {
         $db = new CDatabase($this->database);
         $sql = '
-            INSERT INTO Content(
+            INSERT INTO Blog(
                 title,
+                category,
                 slug,
                 url,
                 data,
                 type,
                 filter,
                 published,
-                updated)
-            VALUES(?,?,?,?,?,?,?,NOW())
+                created)
+            VALUES(?,?,?,?,?,?,?,?,NOW())
         ';
-        $params = array($title, $slug, $url, $data, $type, $filter, $published);
+        $params = array($title, $category, $slug, $url, $data, $type, $filter, $published);
         $db->ExecuteQuery($sql, $params);
         return "Posten är skapad.";
     }
 
     public function getFormContent($id) {
         $title  = null;
+        $category = null;
         $slug   = null;
         $url    = null;
         $data   = null;
-        $type   = null;
         $filter = null;
         $published = null;
         
         $db = new CDatabase($this->database);
         
         // Select from database
-        $sql = 'SELECT * FROM Content WHERE id = ?';
+        $sql = 'SELECT * FROM Blog WHERE id = ?';
         $res = $db->ExecuteSelectQueryAndFetchAll($sql, array($id));
         
         if(isset($res[0])) {
@@ -118,14 +119,14 @@ class CContent {
         
         // Sanitize content before using it.
         $title  = htmlentities($c->title, null, 'UTF-8');
+        $category  = htmlentities($c->category, null, 'UTF-8');
         $slug   = htmlentities($c->slug, null, 'UTF-8');
         $url    = $c->url;
         $data   = htmlentities($c->DATA, null, 'UTF-8');
-        $type   = $c->TYPE;
         $filter = htmlentities($c->FILTER, null, 'UTF-8');
         $published = $c->published;
     
-        $content = array('id'=>$id,'title'=>$title,'slug'=>$slug,'url'=>$url,'data'=>$data,'type'=>$type,'filter'=>$filter,'published'=>$published);
+        $content = array('id'=>$id,'title'=>$title,'category'=>$category,'slug'=>$slug,'url'=>$url,'data'=>$data,'filter'=>$filter,'published'=>$published);
         
         return $content;
     }
@@ -134,10 +135,19 @@ class CContent {
 
         $db = new CDatabase($this->database);
 
-        $sql = "SELECT *, (published <= NOW()) AS available FROM Content;";
+        $sql = "SELECT *, (published <= NOW()) AS available FROM Blog ORDER BY published desc;";
         $res = $db->ExecuteSelectQueryAndFetchAll($sql);
 
         return $res;
+    }
+
+    public function deletePost($id) {
+        $db = new CDatabase($this->database);
+
+        $sql = "DELETE FROM Blog WHERE id = ?";
+        $res = $db->ExecuteSelectQueryAndFetchAll($sql, array($id));
+
+        return "Posten är borttagen!";
     }
 }
 

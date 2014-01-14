@@ -122,12 +122,30 @@ class CDatabase {
     * @return string with links to order by column.
     */
     public function orderBy($column) {
-        if ($column == 'title' || $column == 'year') {
+        if ($column == 'title' || $column == 'year' || $column == 'acronym' || $column == 'name' || $column == 'balance' || $column == 'admin' || $column == 'cost' || $column == 'added') {
             if ($column == 'title') {
                 $title = 'Titel';
             }
-            if ($column == 'year') {
-                $title = 'År';
+            else if ($column == 'year') {
+                $title = 'Release';
+            }
+            else if ($column == 'acronym') {
+                $title = 'Användarnamn';
+            }
+            else if ($column == 'name') {
+                $title = 'Namn';
+            }
+            else if ($column == 'balance') {
+                $title = 'Saldo';
+            }
+            else if ($column == 'admin') {
+                $title = 'Admin';
+            }
+            else if ($column == 'cost') {
+                $title = 'Kostnad';
+            }
+            else if ($column == 'added') {
+                $title = 'Tillgänlig';
             }
         }
         else {
@@ -184,7 +202,13 @@ class CDatabase {
         $nav .= "<a href='" . self::getQueryString(array('page' => ($page > $min ? $page - 1 : $min) )) . "'>◄</a> ";
 
         for($i=$min; $i<=$max; $i++) {
-            $nav .= "<a href='" . self::getQueryString(array('page' => $i)) . "'>$i</a> ";
+            if ($page == $i) {
+                $nav .= "$i ";
+            }
+            else {
+                $nav .= "<a href='" . self::getQueryString(array('page' => $i)) . "'>$i</a> ";
+            }
+            
         }
 
         $nav .= "<a href='" . self::getQueryString(array('page' => ($page < $max ? $page + 1 : $max) )) . "'>►</a> ";

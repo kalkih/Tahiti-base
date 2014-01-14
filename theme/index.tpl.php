@@ -13,7 +13,9 @@
     <div id='wrapper'>
         <div id='header'><?=$header?></div>
         <?php if(isset($navbar)): ?><div id='navbar'><?=get_navbar($navbar)?></div><?php endif; ?>
-        <div id='main'><?=$main?></div>
+        <div id='main'>
+          <div id='main-content'><?=$main?></div>
+        </div>
         <div id='footer'><?=$footer?></div>
     </div>
 
